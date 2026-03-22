@@ -23,7 +23,6 @@ export interface SiteConfig {
   profile: ProfileConfig
   theme: {
     backgroundIntervalMs: number
-    defaultDominantColor: string
   }
   clock: {
     label: string
@@ -44,6 +43,8 @@ export interface BackgroundConfig {
   displayName: string
   link: string
   dominantColor?: string
+  blurHash?: string
+  placeholderDataUrl?: string
   position?: string
   default?: boolean
 }

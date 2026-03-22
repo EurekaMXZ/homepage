@@ -3,11 +3,46 @@ import type { BackgroundConfig } from '../types'
 
 interface BackgroundManagerProps {
   activeBackground: BackgroundConfig
+  activeBackgroundLoaded: boolean
   previousBackground: BackgroundConfig | null
+}
+
+function BackgroundLayer({
+  background,
+  dismissing = false,
+  fullImageLoaded,
+}: {
+  background: BackgroundConfig
+  dismissing?: boolean
+  fullImageLoaded: boolean
+}) {
+  return (
+    <div className={`background-layer${dismissing ? ' dismissing' : ''}`}>
+      <div
+        className="background-image background-placeholder"
+        style={{
+          backgroundColor: background.dominantColor,
+          backgroundImage: background.placeholderDataUrl
+            ? `url(${background.placeholderDataUrl})`
+            : undefined,
+          backgroundPosition: background.position ?? 'center',
+        }}
+      />
+      <div
+        className={`background-image background-full${fullImageLoaded ? ' is-loaded' : ''}`}
+        style={{
+          backgroundImage: `url(${background.url})`,
+          backgroundPosition: background.position ?? 'center',
+        }}
+      />
+      <div className="background-image background-mask" />
+    </div>
+  )
 }
 
 export function BackgroundManager({
   activeBackground,
+  activeBackgroundLoaded,
   previousBackground,
 }: BackgroundManagerProps) {
   useEffect(() => {
@@ -40,21 +75,16 @@ export function BackgroundManager({
   return (
     <div id="background" aria-hidden="true">
       {previousBackground ? (
-        <div
-          className="background-image dismissing"
-          style={{
-            backgroundImage: `url(${previousBackground.url})`,
-            backgroundPosition: previousBackground.position ?? 'center',
-          }}
+        <BackgroundLayer
+          background={previousBackground}
+          dismissing
+          fullImageLoaded
         />
       ) : null}
-      <div
+      <BackgroundLayer
         key={activeBackground.url}
-        className="background-image"
-        style={{
-          backgroundImage: `url(${activeBackground.url})`,
-          backgroundPosition: activeBackground.position ?? 'center',
-        }}
+        background={activeBackground}
+        fullImageLoaded={activeBackgroundLoaded}
       />
     </div>
   )

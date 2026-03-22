@@ -12,8 +12,7 @@ export const siteConfig = {
     email: "eurekamxz@gmail.com",
   },
   theme: {
-    backgroundIntervalMs: 15000,
-    defaultDominantColor: "#96ceff",
+    backgroundIntervalMs: 10000,
   },
   clock: {
     label: "Shanghai",

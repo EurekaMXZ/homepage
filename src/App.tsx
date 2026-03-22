@@ -4,7 +4,7 @@ import { FooterBar } from './components/FooterBar'
 import { HeroSection } from './components/HeroSection'
 import { MainContent } from './components/MainContent'
 import { ScrollArrow } from './components/ScrollArrow'
-import { backgrounds } from './config/backgrounds'
+import { runtimeBackgrounds } from './config/runtimeBackgrounds'
 import { bentoWidgets } from './config/widgets'
 import { projects } from './config/projects'
 import { siteConfig } from './config/site'
@@ -25,8 +25,8 @@ export default function App() {
   useDeviceClasses()
 
   const { hasScrolled } = useScrollProgress()
-  const { activeBackground, previousBackground } = useBackgroundRotation(
-    backgrounds,
+  const { activeBackground, activeBackgroundLoaded, previousBackground } = useBackgroundRotation(
+    runtimeBackgrounds,
     siteConfig.theme.backgroundIntervalMs,
   )
   const projectCards = useGitHubProjects(projects)
@@ -88,6 +88,7 @@ export default function App() {
     <>
       <BackgroundManager
         activeBackground={activeBackground}
+        activeBackgroundLoaded={activeBackgroundLoaded}
         previousBackground={previousBackground}
       />
       <HeroSection profile={siteConfig.profile} />

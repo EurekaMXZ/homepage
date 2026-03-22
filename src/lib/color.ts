@@ -3,10 +3,6 @@ import {
   hexFromArgb,
   themeFromSourceColor,
 } from '@material/material-color-utilities'
-import type { BackgroundConfig } from '../types'
-
-const dominantColorCache = new Map<string, string>()
-
 function setCssVariable(name: string, value: string) {
   document.body.style.setProperty(name, value)
   document.documentElement.style.setProperty(name, value)
@@ -58,57 +54,4 @@ export function applyMaterialTheme(sourceColor: string) {
     setCssVariable(name, value)
     setRgbFallbackChannels(name, value)
   }
-}
-
-export async function extractDominantColor(background: BackgroundConfig) {
-  if (background.dominantColor) {
-    return background.dominantColor
-  }
-
-  const cached = dominantColorCache.get(background.url)
-  if (cached) {
-    return cached
-  }
-
-  const image = new Image()
-  image.crossOrigin = 'anonymous'
-  image.decoding = 'async'
-
-  await new Promise<void>((resolve, reject) => {
-    image.onload = () => resolve()
-    image.onerror = () => reject(new Error(`Failed to load ${background.url}`))
-    image.src = background.url
-  })
-
-  const canvas = document.createElement('canvas')
-  canvas.width = 48
-  canvas.height = 48
-
-  const context = canvas.getContext('2d', { willReadFrequently: true })
-
-  if (!context) {
-    return '#68bba1'
-  }
-
-  context.drawImage(image, 0, 0, canvas.width, canvas.height)
-  const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data
-
-  let red = 0
-  let green = 0
-  let blue = 0
-  let samples = 0
-
-  for (let index = 0; index < pixels.length; index += 16) {
-    red += pixels[index] ?? 0
-    green += pixels[index + 1] ?? 0
-    blue += pixels[index + 2] ?? 0
-    samples += 1
-  }
-
-  const color = `#${[red, green, blue]
-    .map((value) => Math.round(value / samples).toString(16).padStart(2, '0'))
-    .join('')}`
-
-  dominantColorCache.set(background.url, color)
-  return color
 }
