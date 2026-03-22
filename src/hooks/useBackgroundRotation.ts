@@ -39,6 +39,7 @@ export function useBackgroundRotation(
   backgrounds: BackgroundConfig[],
   intervalMs: number,
 ) {
+  const retryDelayMs = Math.min(intervalMs, 5000)
   const initial = createInitialQueue(backgrounds)
   const [activeBackground, setActiveBackground] = useState(initial.first)
   const [previousBackground, setPreviousBackground] =
@@ -123,10 +124,23 @@ export function useBackgroundRotation(
       return null
     }
 
+    const scheduleRetry = (delay: number) => {
+      rotationTimer = window.setTimeout(() => {
+        if (!cancelled) {
+          void scheduleAdvance()
+        }
+      }, delay)
+    }
+
     const scheduleAdvance = async () => {
       const next = await takeNextReadyBackground()
 
-      if (cancelled || !next) {
+      if (cancelled) {
+        return
+      }
+
+      if (!next) {
+        scheduleRetry(retryDelayMs)
         return
       }
 
