@@ -1,5 +1,10 @@
 # Elegant and configurable personal homepage
 
+<p align="center">
+  <img src="https://blog-static.eurekamxz.me/images/screenshot_20260322_164542.png" width="45%" />
+  <img src="https://blog-static.eurekamxz.me/images/screenshot_20260322_164613.png" width="45%" />
+</p>
+
 ## Quick start
 
 ```bash
