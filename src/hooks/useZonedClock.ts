@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 interface ZonedDateParts {
   year: number
@@ -59,7 +59,6 @@ function getOffsetMinutes(parts: ZonedDateParts, date: Date) {
 
 export function useZonedClock(timeZone: string) {
   const [now, setNow] = useState(() => new Date())
-  const minuteAnchor = useRef(new Date(new Date().setSeconds(0, 0)))
   const formatters = useMemo(
     () => ({
       displayDate: new Intl.DateTimeFormat(undefined, {
@@ -102,6 +101,7 @@ export function useZonedClock(timeZone: string) {
     const timeZoneName =
       getTimeZoneName(formatters.timeZoneName, now) ||
       formatOffsetLabel(remoteOffsetMinutes).replace('UTC ', 'GMT')
+    const minuteTurns = Math.floor(now.getTime() / 60000)
 
     return {
       month: zoned.month.toString().padStart(2, '0'),
@@ -120,9 +120,7 @@ export function useZonedClock(timeZone: string) {
       offsetLabel: formatOffsetLabel(remoteOffsetMinutes),
       hourAngle: (zoned.hour % 12) * 30 + zoned.minute * 0.5,
       minuteAngle: zoned.minute * 6 + zoned.second * 0.1,
-      secondAngle:
-        Math.floor((now.getTime() - minuteAnchor.current.getTime()) / 1000 / 60) * 360 +
-        zoned.second * 6,
+      secondAngle: minuteTurns * 360 + zoned.second * 6,
     }
   }, [formatters, now])
 }

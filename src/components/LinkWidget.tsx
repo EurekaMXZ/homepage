@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react'
-import { getSimpleIconColor, IconRenderer } from './IconRenderer'
+import { getSimpleIconColor } from '../lib/icon'
+import { IconRenderer } from './IconRenderer'
 import { Widget } from './Widget'
 import type { LinkWidgetConfig } from '../types'
 

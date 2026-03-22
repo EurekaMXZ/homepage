@@ -175,7 +175,7 @@ export function useBackgroundRotation(
       cancelled = true
       clearTimers()
     }
-  }, [backgrounds, intervalMs])
+  }, [backgrounds, intervalMs, retryDelayMs])
 
   return {
     activeBackground,

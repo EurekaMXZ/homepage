@@ -2,7 +2,7 @@
 
 <p align="center">
   <img src="https://blog-static.eurekamxz.me/images/screenshot_20260322_164542.png" width="45%" />
-  <img src="https://blog-static.eurekamxz.me/images/screenshot_20260322_164613.png" width="45%" />
+  <img src="https://blog-static.eurekamxz.me/images/screenshot_20260322_233749.png" width="45%" />
 </p>
 
 ## Quick start
@@ -12,7 +12,7 @@ pnpm install
 pnpm dev
 ```
 
-## Edit only these files
+## Edit these files
 
 - `src/config/site.ts`
 - `src/config/backgrounds.ts`
@@ -26,9 +26,10 @@ These four files control the profile, hero text, avatar path, background rotatio
 ### GitHub Pages
 
 1. Fork the repository.
-2. Push to `main`.
-3. In repository settings, enable GitHub Pages and choose GitHub Actions as the source.
-4. The included workflow at `.github/workflows/deploy-pages.yml` will build and publish automatically.
+2. Enable github pages workflow at `.github/workflows/deploy-pages.yml`
+3. Push to `main`.
+4. In repository settings, enable GitHub Pages and choose GitHub Actions as the source.
+5. The included workflow at `.github/workflows/deploy-pages.yml` will build and publish automatically.
 
 ### Vercel
 

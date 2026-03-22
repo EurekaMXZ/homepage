@@ -8,18 +8,20 @@ interface ImageWidgetProps {
 }
 
 export function ImageWidget({ config }: ImageWidgetProps) {
-  const [currentSrc, setCurrentSrc] = useState(config.src)
-  const [loaded, setLoaded] = useState(false)
+  const [imageState, setImageState] = useState(() => ({
+    sourceSrc: config.src,
+    currentSrc: config.src,
+    loaded: false,
+  }))
   const useImageElement =
     (config.backgroundSize === 'contain' || config.backgroundSize === 'cover') &&
     !config.mobileBackgroundSize &&
     !config.mobileBackgroundPosition &&
     !config.pixelated
 
-  useEffect(() => {
-    setCurrentSrc(config.src)
-    setLoaded(false)
-  }, [config.src])
+  const currentSrc =
+    imageState.sourceSrc === config.src ? imageState.currentSrc : config.src
+  const loaded = imageState.sourceSrc === config.src ? imageState.loaded : false
 
   useEffect(() => {
     if (!useImageElement || !config.fallbackSrc || loaded || currentSrc !== config.src) {
@@ -27,7 +29,17 @@ export function ImageWidget({ config }: ImageWidgetProps) {
     }
 
     const timer = window.setTimeout(() => {
-      setCurrentSrc(config.fallbackSrc!)
+      setImageState((previous) => {
+        if (previous.sourceSrc !== config.src || previous.currentSrc !== config.src) {
+          return previous
+        }
+
+        return {
+          sourceSrc: config.src,
+          currentSrc: config.fallbackSrc!,
+          loaded: false,
+        }
+      })
     }, 2500)
 
     return () => window.clearTimeout(timer)
@@ -50,10 +62,20 @@ export function ImageWidget({ config }: ImageWidgetProps) {
       loading="lazy"
       draggable={false}
       onDragStart={(event) => event.preventDefault()}
-      onLoad={() => setLoaded(true)}
+      onLoad={() => {
+        setImageState({
+          sourceSrc: config.src,
+          currentSrc,
+          loaded: true,
+        })
+      }}
       onError={() => {
         if (config.fallbackSrc && currentSrc !== config.fallbackSrc) {
-          setCurrentSrc(config.fallbackSrc)
+          setImageState({
+            sourceSrc: config.src,
+            currentSrc: config.fallbackSrc,
+            loaded: false,
+          })
         }
       }}
       style={{
