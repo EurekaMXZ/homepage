@@ -1,5 +1,7 @@
+import type { CSSProperties } from 'react'
 import { Widget } from './Widget'
 import { useZonedClock } from '../hooks/useZonedClock'
+import { SECOND_HAND_TRANSITION_MS } from '../hooks/useSecondHand'
 import type { ClockWidgetConfig } from '../types'
 
 interface ClockWidgetProps {
@@ -8,6 +10,15 @@ interface ClockWidgetProps {
 
 export function ClockWidget({ config }: ClockWidgetProps) {
   const clock = useZonedClock(config.timeZone)
+  const secondHandClasses = ['widget-clock-hand', 'widget-clock-second-hand']
+  const secondHandStyle = {
+    transform: `rotate(${clock.secondAngle}deg)`,
+    '--second-hand-transition-ms': `${SECOND_HAND_TRANSITION_MS}ms`,
+  } as CSSProperties
+
+  if (!clock.secondTransitionEnabled) {
+    secondHandClasses.push('widget-clock-second-hand-no-transition')
+  }
 
   return (
     <Widget
@@ -19,7 +30,7 @@ export function ClockWidget({ config }: ClockWidgetProps) {
       startRow={config.startRow}
       mStartColumn={config.mStartColumn}
       mStartRow={config.mStartRow}
-      ariaLabel={`${config.label} ${clock.hour}:${clock.minute}`}
+      ariaLabel={`${config.label} ${clock.hour}:${clock.minute}:${clock.second} ${clock.timeZoneName} ${clock.offsetLabel}`}
       directChild
     >
       <div className="clock-widget">
@@ -41,8 +52,8 @@ export function ClockWidget({ config }: ClockWidgetProps) {
             style={{ transform: `rotate(${clock.minuteAngle}deg)` }}
           />
           <div
-            className="widget-clock-hand widget-clock-second-hand"
-            style={{ transform: `rotate(${clock.secondAngle}deg)` }}
+            className={secondHandClasses.join(' ')}
+            style={secondHandStyle}
           />
         </div>
         <div className="widget-clock-text">

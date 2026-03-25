@@ -751,7 +751,15 @@ html[style*="--scroll-y: 7px"] .content {
 .widget .clock-widget .widget-clock-face .widget-clock-second-hand {
   --color: var(--md-sys-color-primary);
   filter: saturate(0.6) brightness(1.1);
-  transition: transform 0.3s ease;
+  transition: transform var(--second-hand-transition-ms, 180ms) ease-out;
+  will-change: transform;
+}
+
+.widget
+  .clock-widget
+  .widget-clock-face
+  .widget-clock-second-hand.widget-clock-second-hand-no-transition {
+  transition: none;
 }
 
 .widget .clock-widget .widget-clock-face .widget-clock-second-hand::before {
