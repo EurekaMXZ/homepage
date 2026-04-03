@@ -3,7 +3,7 @@ import {
   siGithub,
   siGitbook,
   siTelegram,
-  siLinux,
+  siX,
 } from "simple-icons";
 import { siteConfig } from "./site";
 import type { WidgetConfig } from "../types";
@@ -83,12 +83,12 @@ export const bentoWidgets: WidgetConfig[] = [
     mRows: 2,
   },
   {
-    id: "linux-do",
+    id: "x",
     type: "link",
-    title: "Linux.Do",
-    description: "Follow me on Linux.Do",
-    icon: siLinux,
-    href: "https://linux.do/u/eurekamxz/",
+    title: "X",
+    description: "Follow me on X",
+    icon: siX,
+    href: "https://x.com/EurekaMXZ",
     columns: 2,
     rows: 2,
     mColumns: 2,
